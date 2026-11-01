@@ -21,13 +21,7 @@
   --f-dou:"Source Serif 4",Georgia,"Times New Roman",serif;
   --f-mono:ui-monospace,"SFMono-Regular",Menlo,Consolas,monospace;
 }
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
-  --bg:#0E1618; --surface:#162125; --sunk:#1C292E; --ink:#E3EBEA; --muted:#93A5AA; --line:#2B3B40;
-  --accent:#62C3B6; --accent-ink:#0E1618;
-  --id:#93B4F2; --id-bg:#1B2A45; --prev:#E5BA5E; --prev-bg:#352B10;
-  --old:#F29379; --old-bg:#3B211A; --new:#78D597; --new-bg:#163222; --warn:#E5BA5E; --warn-bg:#352B10; --info:#A9C3D9; --info-bg:#1E2C38;
-  color-scheme:dark}}
-:root[data-theme="dark"]{
+:root:not([data-modo="claro"]){
   --bg:#0E1618; --surface:#162125; --sunk:#1C292E; --ink:#E3EBEA; --muted:#93A5AA; --line:#2B3B40;
   --accent:#62C3B6; --accent-ink:#0E1618;
   --id:#93B4F2; --id-bg:#1B2A45; --prev:#E5BA5E; --prev-bg:#352B10;
@@ -155,6 +149,8 @@ table.parsed{width:100%;border-collapse:collapse;font-size:.88rem}
 .regras summary{cursor:pointer;font:700 1rem var(--f-display);font-stretch:92%}
 .regras ol{margin:12px 0 0;padding-left:1.3em;display:grid;gap:6px;max-width:80ch}
 footer{padding-block:0 48px;color:var(--muted);font-size:.84rem}
+footer .wrap{display:grid;gap:6px}
+footer .contato{text-align:center}
 
 @media (max-width:860px){
   .gen{grid-template-columns:1fr}
@@ -165,10 +161,15 @@ footer{padding-block:0 48px;color:var(--muted);font-size:.84rem}
   .grid .w2{grid-column:auto}
 }
 @media (prefers-reduced-motion: reduce){*{transition:none!important}}
+
+.toprow{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.modo{display:inline-flex;align-items:center;gap:6px;font:600 .82rem var(--f-body);padding:7px 12px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer}
+.modo:hover{border-color:var(--accent)}
+.modo svg{width:15px;height:15px}
+:root[data-modo="claro"]{color-scheme:light}
 /* ===== Pop-up "Onde encontrar" ===== */
 :root{--paper:#FFFFFF;--paper-ink:#1D2328;--paper-muted:#7A858C;--paper-band:#EEF1F2;--marker:#FFE27A;--marker-ink:#14212A;--pin:#14212A;--pin-ink:#FFFFFF;--scrim:rgba(10,20,24,.55)}
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--scrim:rgba(0,0,0,.7);--pin:#FFE27A;--pin-ink:#14212A}}
-:root[data-theme="dark"]{--scrim:rgba(0,0,0,.7);--pin:#FFE27A;--pin-ink:#14212A}
+:root:not([data-modo="claro"]){--scrim:rgba(0,0,0,.7);--pin:#FFE27A;--pin-ink:#14212A}
 
 .help{display:inline-grid;place-items:center;width:18px;height:18px;margin-left:6px;border-radius:50%;border:1px solid var(--accent);background:transparent;color:var(--accent);font:800 .7rem/1 var(--f-display,system-ui);cursor:pointer;vertical-align:1px;padding:0}
 .help:hover,.help:focus-visible{background:var(--accent);color:var(--accent-ink)}
@@ -231,11 +232,12 @@ div[data-hl].on,p[data-hl].on{padding:2px 4px;margin:0 -4px}
 </head>
 <body>
 
+<script>try{if(localStorage.getItem("modo-retificacao")==="claro")document.documentElement.setAttribute("data-modo","claro")}catch(e){}</script>
 
 <header>
   <div class="wrap">
-    <span class="eyebrow">CGLic · Iphan — extrato padrão de retificação</span>
-    <h1>Monte ou confira a sua retificação</h1>
+    <div class="toprow"><span class="eyebrow">CGLic/Iphan — extrato padrão para retificação</span><button type="button" class="modo" id="modo" aria-pressed="false"></button></div>
+    <h1>Monte ou confira a retificação</h1>
     <p class="sub">Preencha os dados da autorização e os campos que mudam: o texto sai pronto, no extrato padrão. Clique em <span class="help" aria-hidden="true" style="pointer-events:none">?</span> ao lado de cada campo para ver onde a informação está no DOU. Na aba <b>Verificar</b>, cole uma retificação (ou a publicação inteira) para conferir.</p>
   </div>
 </header>
@@ -263,7 +265,7 @@ div[data-hl].on,p[data-hl].on{padding:2px 4px;margin:0 -4px}
       <div class="gen">
         <div class="form">
           <div class="step">
-            <div class="hd"><span class="n">1</span><h2>Autorização retificada</h2></div>
+            <div class="hd"><span class="n">1</span><h2>Autorização a ser retificada</h2></div>
             <div class="grid">
               <div class="field"><label for="f-port">Portaria nº</label><input id="f-port" inputmode="numeric" autocomplete="off"></div>
               <div class="field"><label for="f-ano">Ano</label><input id="f-ano" inputmode="numeric" autocomplete="off"></div>
@@ -352,9 +354,37 @@ div[data-hl].on,p[data-hl].on{padding:2px 4px;margin:0 -4px}
     </ol>
   </details>
 </main>
-<footer><div class="wrap"><p>Os exemplos usam portarias, processos e nomes fictícios. O formulário guarda o rascunho só neste navegador.</p></div></footer>
+<footer>
+  <div class="wrap"><p>Os exemplos usam portarias, processos e nomes fictícios. O formulário guarda o rascunho só neste navegador.</p>
+   <br />
+   <p class="contato">
+    Sistema desenvolvido por Tacio Machado (CGLic/IPHAN)<br />
+    Para envio de dúvidas, sugestões, elogios e reclamações, encaminhar para <a href="mailto:licenciamento.dados@iphan.gov.br">licenciamento.dados@iphan.gov.br</a>
+   </p>
+  </div>
+</footer>
 
 <script>
+
+/* ---- Alternar modo claro/escuro (padrão: escuro) ---- */
+(function(){
+  const root = document.documentElement, b = document.getElementById('modo');
+  const SOL = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>';
+  const LUA = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>';
+  function aplicar(m){
+    if (m === 'claro') root.setAttribute('data-modo', 'claro'); else root.removeAttribute('data-modo');
+    const claro = m === 'claro';
+    b.innerHTML = claro ? LUA + 'Modo escuro' : SOL + 'Modo claro';
+    b.setAttribute('aria-label', claro ? 'Mudar para o modo escuro' : 'Mudar para o modo claro');
+    b.setAttribute('aria-pressed', String(claro));
+  }
+  aplicar(root.getAttribute('data-modo') === 'claro' ? 'claro' : 'escuro');
+  b.addEventListener('click', () => {
+    const novo = root.getAttribute('data-modo') === 'claro' ? 'escuro' : 'claro';
+    aplicar(novo);
+    try { localStorage.setItem('modo-retificacao', novo); } catch(e){}
+  });
+})();
 /* ===== Pop-up "Onde encontrar" — ilustrações do DOU com dados fictícios ===== */
 (function(){
   const H = (k, html, tag, cls) => `<${tag||'span'}${cls?` class="${cls}"`:''} data-hl="${k}">${html}</${tag||'span'}>`;
@@ -718,7 +748,7 @@ if (typeof module !== 'undefined') module.exports = { analisar, analisarLote, no
   modelo(1);
 
   /* ---------- Estado ---------- */
-  const ROM = ['I','II','III','IV','V','VI','VII','VIII','IX','X'];
+  const ROM = ['I','II','III','IV','V','VI','VII'];
   $('#f-anexo').innerHTML = ROM.map(r => `<option>${r}</option>`).join('');
   const IDS = ['port','ano','anexo','tipo','item','proc','data','pag','n','nx','pdata','ppag'];
   const numRet = v => v.n === '8+' ? Math.max(8, parseInt(v.nx, 10) || 8) : (+v.n || 1);
